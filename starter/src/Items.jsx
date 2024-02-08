@@ -1,17 +1,22 @@
 import SingleItem from './SingleItem';
-import { useQuery } from "@tanstack/react-query"
+import {useFetchTasks} from './reactQueryCustomHooks'
 
-const Items = ({ items }) => {
-  const result = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => customFetch.get("/")
-  })
-  console.log(result);
+const Items = () => {
+  const {isLoading, isError, data} = useFetchTasks()
 
-  
+  // console.log(data);
+
+  if (isLoading) {
+    return <p style={{ marginTop: '1rem ' }}>Loading...</p>;
+  }
+
+    if (isError) {
+    return <p style={{ marginTop: '1rem ' }}>there was an error...</p>;
+  }
+
   return (
     <div className='items'>
-      {items.map((item) => {
+      {data.taskList.map((item) => {
         return <SingleItem key={item.id} item={item} />;
       })}
     </div>
